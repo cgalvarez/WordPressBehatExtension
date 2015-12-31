@@ -36,12 +36,13 @@ class WordPressContext extends MinkContext
             $password = $row["password"];
         }
 
-        $mysqli = new \Mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $mysqli = new \Mysqli(DB_HOST, DB_USER, DB_PASSWORD);
         $value = $mysqli->multi_query(implode("\n", array(
             "DROP DATABASE IF EXISTS " . DB_NAME . ";",
             "CREATE DATABASE " . DB_NAME . ";",
         )));
         assertTrue($value);
+        $mysqli->select_db(DB_NAME);
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         wp_install($name, $username, $email, true, '', $password);
 
